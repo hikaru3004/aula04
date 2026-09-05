@@ -1,4 +1,6 @@
----
+
+# Relatório
+
 **O que foi pedido** — Investiguei o pacote `mcp` instalado no `.venv` e descrevi, em um parágrafo, quais transportes ele suporta e em quais arquivos cada um está implementado.
 
 **O que foi feito** — Escrevi `resultado.txt` com a resposta completa: o pacote MCP (v2.1.1) suporta `stdio`, `sse` e `streamable_http`, cada um com arquivos de cliente (`mcp/client/`) e servidor (`mcp/server/`). O arquivo `servidor.py` está funcional como servidor MCP do diário, e o `opencode.json` está configurado.
