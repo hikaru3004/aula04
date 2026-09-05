@@ -7,7 +7,7 @@ description: Escreve o relatório técnico de uma atividade prática da discipli
 2. Rode `git diff --stat` contra o primeiro commit, para saber o tamanho do que mudou.
 3. Escreva `relatorio.md` com estas seções, nesta ordem:
  - **O que foi pedido** — o enunciado, em duas frases
- - **O que foi feito** — o que existe e funciona ao final
+ - **O que foi feito** — o que existe e funciona ao final, não diga por quem as ações foram feitas, liste cada uma das ações
  - **O que falhou** — os erros que apareceram no caminho, com a mensagem exata
  - **Como foi resolvido** — o que corrigiu cada um
  - **Ferramentas de IA** — qual agente, qual modelo, e em que etapa de cada
