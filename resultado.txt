@@ -1,0 +1,154 @@
+sem subagente
+Investigue o pacote mcp instalado em .venv e me diga, em um parágrafo,
+quais
+transportes ele suporta e em quais arquivos cada um está implementado. 
++ Thought: 888ms
+$ find .venv -name "*mcp*" -type d 2>/dev/null | head -20
+.venv/lib/python3.14/site-packages/mcp
+.venv/lib/python3.14/site-packages/mcp/server/mcpserver
+.venv/lib/python3.14/site-packages/mcp-2.1.1.dist-info
+.venv/lib/python3.14/site-packages/mcp_types-2.1.1.dist-info
+.venv/lib/python3.14/site-packages/mcp_types
++ Thought: 337ms
+$ ls -la .venv/lib/python3.14/site-packages/mcp/
+total 40
+drwxr-xr-x  9 sandy sandy 4096 Sep  2 21:54 .
+drwxr-xr-x 80 sandy sandy 4096 Sep  2 23:56 ..
+-rw-r--r--  1 sandy sandy 3719 Sep  2 21:54 __init__.py
+drwxr-xr-x  2 sandy sandy 4096 Sep  2 21:54 __pycache__
+drwxr-xr-x  3 sandy sandy 4096 Sep  2 21:54 cli
+drwxr-xr-x  4 sandy sandy 4096 Sep  2 21:54 client
+drwxr-xr-x  5 sandy sandy 4096 Sep  2 21:54 os
+-rw-r--r--  1 sandy sandy    0 Sep  2 21:54 py.typed
+drwxr-xr-x  6 sandy sandy 4096 Sep  2 21:54 server
+…
+Click to expand
++ Thought: 555ms
+$ find .venv/lib/python3.14/site-packages/mcp -name "*.py" | xargs grep -l "transport" | head -20
+.venv/lib/python3.14/site-packages/mcp/os/win32/utilities.py
+.venv/lib/python3.14/site-packages/mcp/types/__init__.py
+.venv/lib/python3.14/site-packages/mcp/client/sse.py
+.venv/lib/python3.14/site-packages/mcp/client/__main__.py
+.venv/lib/python3.14/site-packages/mcp/client/extension.py
+.venv/lib/python3.14/site-packages/mcp/client/__init__.py
+.venv/lib/python3.14/site-packages/mcp/client/_probe.py
+.venv/lib/python3.14/site-packages/mcp/client/caching.py
+.venv/lib/python3.14/site-packages/mcp/client/_memory.py
+.venv/lib/python3.14/site-packages/mcp/client/_transport.py
+…
+Click to expand
++ Thought: 1.6s
+→Read .venv/lib/python3.14/site-packages/mcp/client/__init__.py 
+→Read .venv/lib/python3.14/site-packages/mcp/client/_transport.py 
++ Thought: 2.5s
+→Read .venv/lib/python3.14/site-packages/mcp/client/stdio.py 
+→Read .venv/lib/python3.14/site-packages/mcp/client/sse.py 
+→Read .venv/lib/python3.14/site-packages/mcp/client/streamable_http.py 
++ Thought: 2.2s
+$ ls -la .venv/lib/python3.14/site-packages/mcp/server/
+total 336
+drwxr-xr-x 6 sandy sandy  4096 Sep  2 21:54 .
+drwxr-xr-x 9 sandy sandy  4096 Sep  2 21:54 ..
+-rw-r--r-- 1 sandy sandy   318 Sep  2 21:54 __init__.py
+-rw-r--r-- 1 sandy sandy   585 Sep  2 21:54 __main__.py
+drwxr-xr-x 2 sandy sandy  4096 Sep  2 21:54 __pycache__
+-rw-r--r-- 1 sandy sandy  3359 Sep  2 21:54 _otel.py
+-rw-r--r-- 1 sandy sandy 21944 Sep  2 21:54 _streamable_http_modern.py
+-rw-r--r-- 1 sandy sandy  9680 Sep  2 21:54 apps.py
+drwxr-xr-x 5 sandy sandy  4096 Sep  2 21:54 auth
+…
+Click to expand
++ Thought: 4.7s
+→Read .venv/lib/python3.14/site-packages/mcp/server/stdio.py 
+→Read .venv/lib/python3.14/site-packages/mcp/server/sse.py 
+→Read .venv/lib/python3.14/site-packages/mcp/server/streamable_http.py [limit=100]
++ Thought: 10.4s
+O pacote MCP (v2.1.1) em .venv/lib/python3.14/site-packages/mcp suporta três transportes principais, cada um implementado tanto no cliente quanto no servidor:
+No cliente (mcp/client/):  
+1. stdio — stdio.py: executa o servidor como subprocesso e troca mensagens JSON-RPC delimitadas por newline via stdin/stdout.  
+2. sse — sse.py: conecta a um endpoint SSE, recebe eventos do servidor e envia mensagens via POST HTTP.  
+3. streamable_http — streamable_http.py: implementa o protocolo Streamable HTTP com suporte a sessões, reconexão automática via Last-Event-ID, cancelamento moderno (2026) e terminação de sessão via DELETE.
+No servidor (mcp/server/):  
+1. stdio — stdio.py: serve MCP sobre stdin/stdout do processo, com proteção contra vazamento de descritores.  
+2. sse — sse.py: expõe dois apps ASGI (connect_sse para GET/SSE e handle_post_message para POST) com autenticação e proteção DNS rebinding.  
+3. streamable_http — streamable_http.py e _streamable_http_modern.py: implementação completa do Streamable HTTP com roteamento de requisições, streams por requisição, retomada de sessão e gerenciador de sessões em streamable_http_manager.py.
+▣  Build · Nemotron 3 Ultra (free) · 3m 12s
+
+
+com subagente
+@explore investigue o pacote mcp instalado em .venv e me diga, em um
+parágrafo,
+quais transportes ele suporta e em quais arquivos cada um está
+implementado. 
+$ ls .venv/lib/python*/site-packages/ | grep -i mcp || ls .venv/lib/*/site-packages/ | grep -i mcp
+mcp
+mcp-2.1.1.dist-info
+mcp_types
+mcp_types-2.1.1.dist-info
+✱Glob ".venv/lib/python*/site-packages/mcp/**/*.py" 
+✱Glob ".venv/lib/python*/site-packages/mcp/**" 
+$ python3 -c "import site, sys, os; print([p for p in sys.path if 'site-packages' in p])"
+['/home/sandy/programação-2026/aula-04/.venv/lib/python3.14/site-packages']
+$ ls -la .venv/lib/python3.14/site-packages/mcp/
+total 40
+drwxr-xr-x  9 sandy sandy 4096 Sep  2 21:54 .
+drwxr-xr-x 80 sandy sandy 4096 Sep  2 23:56 ..
+-rw-r--r--  1 sandy sandy 3719 Sep  2 21:54 __init__.py
+drwxr-xr-x  2 sandy sandy 4096 Sep  2 21:54 __pycache__
+drwxr-xr-x  3 sandy sandy 4096 Sep  2 21:54 cli
+drwxr-xr-x  4 sandy sandy 4096 Sep  2 21:54 client
+drwxr-xr-x  5 sandy sandy 4096 Sep  2 21:54 os
+-rw-r--r--  1 sandy sandy    0 Sep  2 21:54 py.typed
+drwxr-xr-x  6 sandy sandy 4096 Sep  2 21:54 server
+…
+Click to expand
+$ grep -rni -E 'transport|stdio|sse|http' .venv/lib/python3.14/site-packages/mcp/ --include='*.py' | head -n 60
+.venv/lib/python3.14/site-packages/mcp/os/win32/utilities.py:1:"""Windows-specific functionality for stdio transport operations."""
+.venv/lib/python3.14/site-packages/mcp/os/win32/utilities.py:131:# The process handle stdio_client drives: anyio's Process, or the Popen-backed
+.venv/lib/python3.14/site-packages/mcp/os/win32/utilities.py:198:    """Creates a Windows Job Object configured to terminate all its processes when closed."""
+.venv/lib/python3.14/site-packages/mcp/os/posix/utilities.py:1:"""POSIX-specific functionality for stdio client operations."""
+.venv/lib/python3.14/site-packages/mcp/__init__.py:68:from .client.stdio import StdioServerParameters, stdio_client
+.venv/lib/python3.14/site-packages/mcp/__init__.py:70:from .server.stdio import stdio_server
+.venv/lib/python3.14/site-packages/mcp/__init__.py:131:    "StdioServerParamet…
+Click to expand
+$ ls -la .venv/lib/python3.14/site-packages/mcp/server/
+total 336
+drwxr-xr-x 6 sandy sandy  4096 Sep  2 21:54 .
+drwxr-xr-x 9 sandy sandy  4096 Sep  2 21:54 ..
+-rw-r--r-- 1 sandy sandy   318 Sep  2 21:54 __init__.py
+-rw-r--r-- 1 sandy sandy   585 Sep  2 21:54 __main__.py
+drwxr-xr-x 2 sandy sandy  4096 Sep  2 21:54 __pycache__
+-rw-r--r-- 1 sandy sandy  3359 Sep  2 21:54 _otel.py
+-rw-r--r-- 1 sandy sandy 21944 Sep  2 21:54 _streamable_http_modern.py
+-rw-r--r-- 1 sandy sandy  9680 Sep  2 21:54 apps.py
+drwxr-xr-x 5 sandy sandy  4096 Sep  2 21:54 auth
+…
+Click to expand
+$ echo "--- CLIENT ---"; ls .venv/lib/python3.14/site-packages/mcp/client/; echo "--- SERVER ---"; ls .venv/lib/python3.14/site-packages/mcp/server/
+--- CLIENT ---
+__init__.py
+__main__.py
+__pycache__
+_input_required.py
+_memory.py
+_probe.py
+_transport.py
+auth
+caching.py
+…
+Click to expand
+O pacote mcp (2.1.1) instalado em .venv/lib/python3.14/site-packages/mcp/ suporta três transportes. stdio está implementado em mcp/client/stdio.py, mcp/server/stdio.py e utilitários POSIX/Windows (mcp/os/posix/utilities.py, mcp/os/win32/utilities.py). sse está em mcp/client/sse.py e mcp/server/sse.py. streamable_http aparece em mcp/client/streamable_http.py, mcp/server/streamable_http.py, mcp/server/_streamable_http_modern.py e mcp/server/streamable_http_manager.py, além de mcp/server/_transport.py.
+
+
+@explore investigue o pacote mcp instalado em .venv e me diga, em um
+parágrafo,
+quais transportes ele suporta e em quais arquivos cada um está
+implementado. 
++ Thought: 3.0s
+│Explore Task — Investigate MCP package transports
+ctrl+x down view subagents
+Rate limit exceeded: free-models-per-day. Add 10 credits to unlock 1000 free model requests per day
+@explore investigue o pacote mcp instalado em .venv e me diga, em um
+parágrafo,
+quais transportes ele suporta e em quais arquivos cada um está
+implementado. 

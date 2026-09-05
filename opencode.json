@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "diario": {
+      "type": "local",
+      "command": [".venv/bin/python", "servidor.py"],
+      "cwd": "/home/sandy/programação-2026/aula-04",
+      "enabled": true
+    }
+  }
+}
